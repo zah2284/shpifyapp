@@ -1,0 +1,8 @@
+default:
+  plugins:
+    - image
+    - link
+  selector: textarea.tinymce
+  toolbar: styleselect | bold italic | undo redo | table
+  plugins:
+    - table

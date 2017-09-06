@@ -1,0 +1,5 @@
+ShopifyApp.flashNotice("Product deleted succesfully.");
+$("tr.product-<%= @classid %>").addClass("animated").addClass("zoomOutRight");
+setTimeout(function(){
+  $("tr.product-<%= @classid %>").remove();
+},1000);

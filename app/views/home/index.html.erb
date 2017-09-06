@@ -1,0 +1,204 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({
+        title: "Home",
+        buttons: {
+          primary: {
+            label: 'Settings',
+            href: "/settings"
+          }
+        }
+      });
+    });
+  </script>
+<% end %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12" style="margin-top:20px;">
+      <% if @signup == false %>
+      <div class="panel panel-default">
+        <div class="panel-heading">All Products</div>
+        <div class="panel-body">
+          <a href="<%= refresh_products_path %>" class="with-icon btn btn-warning">
+            <i class='fa fa-refresh'></i>Refresh
+          </a>
+          <br>
+          <div class="table-responsive">
+            <table class="table table-bordered products-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <!-- <th></th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <% i = 1 %>
+                <% @filteredProd.each do |product| %>
+                <tr class="product-<%= product.id %>">
+                  <td class="no">
+                    <%= i %>
+                  </td>
+                  <td>
+                     <%= link_to product.title, "https://#{@shop_session.url}/admin/products/#{product.product_id}", :target => "_blank" %>
+                  </td>
+                  <!-- <td class="remove">
+                    <a href="" data-confirm="Are you sure, you want to delete this product?" data-remote="true" class="">
+                      <i class="fa fa-times"></i>
+                    </a>
+                  </td> -->
+                </tr>
+                <% i = i + 1 %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div class="clearfix">
+            <!-- <a href="" class="btn btn-success btn-fab pull-right">
+              <span class="glyphicon glyphicon-plus"></span>
+            </a> -->
+          </div>
+        </div>
+      </div>
+      <% else %>
+
+      <div class="alert alert-primary">
+        Sign up for a printex account by clicking the button below
+      </div>
+      <div class="alert alert-info">
+        If you already have a printex account then navigation to settings to add your api token
+      </div>
+      <div class="text-center">
+        <button type="button" class="btn btn-lg btn-info" data-toggle="modal" data-target="#signUpModal">
+          Create Account
+        </button>
+      </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signUpModalLabel">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="<%= create_account_path %>" method="POST" class="clearfix" data-remote="true">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[name]" class="bmd-label-floating">Name *</label>
+              <input type="text" name="account[name]" id="account[name]" placeholder="Account/Company name" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[owner_name]" class="control-label">Owner Name</label>
+              <input type="text" name="account[owner_name]" id="account[owner_name]" placeholder="(Optional)" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[email]" class="control-label">Email *</label>
+              <input type="email" name="account[email]" id="account[email]" placeholder="abc@xyz.com" class="form-control" required="required">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[phone_number]" class="control-label">Phone *</label>
+              <input type="tel" name="account[phone_number]" id="account[phone_number]" placeholder="(Optional)" class="form-control">
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[payment_email]" class="control-label">Payment Email </label>
+              <input type="email" name="account[payment_email]" id="account[payment_email]" placeholder="abc@xyz.com" class="form-control">
+              <span class="help-block">
+                Email address to receive Payment invoices to
+              </span>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[international]" class="control-label">International *</label>
+              <select name="account[international]" id="account[international]" class="form-control">
+                <option value="0">Inside US</option>
+                <option value="1" selected="selected">Outside US</option>
+              </select>
+            </div>
+          </div>
+          <hr class="col-xs-12">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[username]" class="control-label">Username *</label>
+              <input type="text" name="account[username]" placeholder="Create Username" id="account[username]" class="form-control" />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[password]" class="control-label">Password *</label>
+              <input type="password" name="account[password]" placeholder="Create password" id="account[password]" class="form-control" />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[web_address]" class="control-label">Store URI *</label>
+              <input type="url" name="account[web_address]" value="<%= @thisshop.shopify_domain %>" disabled="disabled" id="account[web_address]" class="form-control" required="required" />
+            </div>
+          </div>
+          <hr class="col-xs-12">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[from_name]" class="control-label">From Name</label>
+              <input type="text" name="account[from_name]" placeholder="Name" id="account[from_name]" class="form-control" />
+              <span class="help-block">Name that tracking emails come from</span>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[from_email]" class="control-label">From Email</label>
+              <input type="email" name="account[from_email]" placeholder="Email" id="account[from_email]" class="form-control" />
+              <span class="help-block">Email address that tracking emails come from</span>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[copy_customer]" class="control-label">Copy customer</label>
+              <select name="account[copy_customer]" id="account[copy_customer]" class="form-control" >
+                <option value=""></option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+              <span class="help-block">Set yes to have copy of tracking number email sent to <b>Copy email</b></span>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <label for="account[copy_email]" class="control-label">Copy Email</label>
+              <input type="email" name="account[copy_email]" placeholder="Email" id="account[copy_email]" class="form-control" />
+              <span class="help-block">Email address that is copied on tracking</span>
+            </div>
+          </div>
+          <hr class="col-xs-12">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <button type="submit" class="btn btn-info pull-right">Create Account</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>

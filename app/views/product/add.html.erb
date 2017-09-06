@@ -1,0 +1,313 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    ShopifyApp.ready(function(){
+      ShopifyApp.Bar.initialize({
+        title: "Add a new Product",
+        buttons: {
+          primary: {
+            label: 'Home',
+            href: "/"
+          },
+          secondary: {
+            label: 'Settings',
+            href: "/settings"
+          }
+        }
+      });
+    });
+  </script>
+<% end %>
+<div class="container-fluid">
+  <div class="row">
+  <%= form_tag add_product_path, :multipart => true, :method => :POST, :class => "form-horizontal" do %>
+    <div class="col-xs-12" style="margin-top:20px;">
+      <div class="panel panel-info">
+        <div class="panel-heading">Basic Info <a href="/add/product">Add Product</a></div>
+        <div class="panel-body">
+          <div class="form-group">
+            <%= label_tag :product_title, "Title", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <%= text_field_tag :product_title,nil, :class => "form-control", :required => true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= label_tag :product_description, "Description", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <%= text_area_tag :product_description,nil, :row => 15, :class => "form-control tinymce" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">Product Info</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <%= label_tag :product_vendor, "Vendor", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <%= text_field_tag :product_vendor,nil, :class => "form-control" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= label_tag :product_type, "Type", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <%= text_field_tag :product_type,nil, :class => "form-control" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">Product Price</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <%= label_tag :product_price, "Price", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <%= number_field_tag :product_price,nil, :placeholder => "00.00", :class => "form-control", :required => true %>
+                <span class="input-group-addon">
+                  <%= @thisshop.currency %>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= label_tag :product_compare_price, "Compare at price", :class => "col-sm-2 control-label" %>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <%= number_field_tag :product_compare_price,nil, :placeholder => "00.00", :class => "form-control" %>
+                <span class="input-group-addon">
+                  <%= @thisshop.currency %>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">Images</div>
+        <div class="panel-body">
+          <script id="image-template" type="text/x-handlebars-template">
+            <div class="form-group">
+              <label for="product_image[{{i}}]" class="col-sm-2 control-label">Image URL</label>
+              <div class="col-sm-10">
+                <div class="input-group">
+                  <input type="url" name="product_image[{{i}}]" id="product_image[{{i}}]" class="form-control">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger remove" type="button"><i class="fa fa-times"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+              </div>
+            </div>
+          </script>
+          <div id="productImages"></div>
+          <button id="addProductImage" type="button" class="btn btn-primary">Add Image</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">Variants</div>
+        <div class="panel-body variants-panel">
+          <script id="variant-template" type="text/x-handlebars-template">
+            <div class="variant ">
+              <h5>Variant</h5>
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-4">
+                  <div class="form-group">
+                    <input type="text" name="product_variant[{{i}}][option_1]" id="product_variant[{{i}}][option_1]" placeholder="Option 1 *" class="form-control pvalue-1" required="required">
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                  <div class="form-group">
+                    <input type="text" name="product_variant[{{i}}][option_2]" id="product_variant[{{i}}][option_2]" placeholder="Option 2" class="form-control pvalue-2" required="required"  >
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                  <div class="form-group">
+                    <input type="text" name="product_variant[{{i}}][option_3]" id="product_variant[{{i}}][option_3]" placeholder="Option 3" class="form-control pvalue-3" required="required"  >
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" name="product_variant[{{i}}][price]" id="product_variant[{{i}}][price]" placeholder="Price" class="form-control" required="required" >
+                      <span class="input-group-addon">
+                        <%= @thisshop.currency %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" name="product_variant[{{i}}][compare_at_price]" id="product_variant[{{i}}][compare_at_price]" placeholder="Compare at price" class="form-control" >
+                      <span class="input-group-addon">
+                        <%= @thisshop.currency %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 text-center">
+                  <div class="form-group">
+                    <button type="button" class="remove btn btn-fab btn-danger btn-fab-mini"><i class="fa fa-times"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </script>
+          <div id="productOptions">
+            <h5>Options</h5>
+            <div class="clearfix">
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <label for="product_options[1]" class="control-label">Option 1</label>
+                  <input type="text" name="product_options[1]" id="product_options_1" placeholder="Color, Size" class="form-control">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <label for="product_options[2]" class="control-label">Option 2</label>
+                  <input type="text" name="product_options[2]" id="product_options_2" placeholder="Color, Size" class="form-control">
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="form-group">
+                  <label for="product_options[3]" class="control-label">Option 3</label>
+                  <input type="text" name="product_options[3]" id="product_options_3" placeholder="Color, Size" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="productVariants"></div>
+          <button id="addVariant" type="button" class="btn btn-primary btn-fab-mini btn-fab"><i class="fa fa-plus"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12">
+      <%= submit_tag :Add, :class => "btn btn-info pull-right" %>
+    </div>
+    <% end %>
+  </div>
+</div><script>
+$(document).on("turbolinks:load",function() {
+  tinymce.remove();
+  tinyMCE.init({
+    selector: "textarea.tinymce",
+    toolbar: "bold, italic, underline strikethrough | alignleft, aligncenter, alignright, alignjustify | styleselect, formatselect, fontsizeselect | bullist, numlist, blockquote",
+    theme: "modern",
+    skin: "light",
+    menubar: false
+  });
+
+  var imagesource   = $("#image-template").html();
+  var imagetemplate = Handlebars.compile(imagesource);
+  var newImageBtn = $("#addProductImage");
+
+  window.imageCounter = 0;
+  newImageBtn.unbind("click").off("click");
+  newImageBtn.on("click",function(e){
+    e.preventDefault();
+    window.imageCounter++;
+    var newImage = $(imagetemplate({i: window.imageCounter }));
+    newImage.find(".remove").on("click",function(){
+      $(this).closest(".form-group").remove();
+    });
+    $("#productImages").append(newImage);
+  });
+
+  var variantSource   = $("#variant-template").html();
+  var variantTemplate = Handlebars.compile(variantSource);
+  var newVariantBtn = $("#addVariant");
+  var poption1 = $("#product_options_1"),
+      poption2 = $("#product_options_2"),
+      poption3 = $("#product_options_3");
+  var productOptions = $("#productOptions").show();
+
+  window.variantICounter = 0;
+  window.variantCounter = 0;
+  newVariantBtn.unbind("click").off("click");
+  newVariantBtn.on("click",function(e){
+    e.preventDefault();
+
+
+    // creating variables
+    var val1 = poption1.val(),
+        val2 = poption2.val(),
+        val3 = poption3.val();
+
+    // if variant limit is exceeded
+    if( window.variantICounter > 99 ){
+      ShopifyApp.flashError("Variants Limit Reached ");
+      return;
+    }
+
+    // if no options are entered, then display an error
+    if( val1 == ""){
+      ShopifyApp.flashError("Please add options first.");
+      return ;
+    }
+
+    // incrementing variants counter
+    window.variantCounter++;
+    window.variantICounter++;
+
+    // hide the options box
+    productOptions.hide();
+
+    // creating new variant
+    var newVariant = $(variantTemplate({i: window.variantCounter }));
+    newVariant.find(".remove").on("click",function(){
+      $(this).closest(".variant").remove();
+      window.variantICounter--;
+
+      if( $("#productVariants").find(".variant").length < 1){
+        window.variantCounter = 0;
+        window.variantICounter = 0;
+        productOptions.show();
+      }
+    });
+
+    // appending the new variant
+    $("#productVariants").append(newVariant);
+
+    // initializing the inputs with options
+    if( val1 != ""){
+      newVariant.find(".pvalue-1").first().attr("placeholder", val1 );
+
+      if( val2 != ""){
+        newVariant.find(".pvalue-2").first().attr("placeholder", val2 );
+
+        if( val3 != ""){
+          newVariant.find(".pvalue-3").first().attr("placeholder", val3 );
+        }
+        else{
+          newVariant.find(".pvalue-3").first().closest(".form-group").closest("div").remove();
+        }
+      }
+      else{
+        newVariant.find(".pvalue-2").first().closest(".form-group").closest("div").remove();
+        newVariant.find(".pvalue-3").first().closest(".form-group").closest("div").remove();
+
+      }
+    }
+    else{
+      newVariant.find(".pvalue-1").first().closest(".form-group").closest("div").remove();
+      newVariant.find(".pvalue-2").first().closest(".form-group").closest("div").remove();
+      newVariant.find(".pvalue-3").first().closest(".form-group").closest("div").remove();
+
+
+    }
+
+
+    ShopifyApp.flashNotice("Variant Added");
+    console.log(window.variantICounter);
+  });
+});
+</script>
