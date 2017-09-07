@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root :to => 'home#index'
 
+  mount ShopifyApp::Engine, at: '/'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   # webhooks
   post '/webhooks/uninstall', :to => "webhook_manager#uninstall"
   post '/webhooks/order/create', :to => "webhook_manager#order_create"
@@ -15,6 +18,4 @@ Rails.application.routes.draw do
 
 
 
-  mount ShopifyApp::Engine, at: '/'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
