@@ -15,3 +15,4 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
       strategy.options[:client_options][:site] = shop
     }
+end
