@@ -126,6 +126,8 @@ class HomeController < ShopifyApp::AuthenticatedController
     @thisshop.printex_token = parameters[:printex_token]
     @thisshop.save
 
+    @show_notification = true
+
     redirect_to :settings
     return
   end

@@ -32,3 +32,10 @@
     </div>
   </div>
 </div>
+<% if @show_notification %>
+<script>
+  $(document).on("turbolinks:load",function(){
+    ShopifyApp.flashNotice("API Token saved successfully");
+  });
+</script>
+<% end %>
