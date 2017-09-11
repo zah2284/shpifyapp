@@ -1,6 +1,6 @@
 <% content_for :javascript do %>
 <script type="text/javascript">
-  var eventName = typeof(Turbolinks) !== 'undefined' ? 'page:change' : 'DOMContentLoaded';
+  var eventName = typeof(Turbolinks) !== 'undefined' ? 'turbolinks:load' : 'DOMContentLoaded';
 
   document.addEventListener(eventName, function() {
     <% if flash[:notice] %>
