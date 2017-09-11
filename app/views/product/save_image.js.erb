@@ -1,0 +1,7 @@
+<% if @success %>
+ShopifyApp.flashNotice("Image selected successfully.");
+var app = ShopifyApp.window();
+app.$("body").find(".image-<%= @product.id %>").first().removeClass("hidden").next("span.text-danger").remove();
+app.$("body").find(".image-<%= @product.id %> img").first().attr("src","<%= params[:image_src] %>");
+<% end %>
+ShopifyApp.Modal.close();

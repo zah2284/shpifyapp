@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170906055844) do
+ActiveRecord::Schema.define(version: 20170911174558) do
 
   create_table "products", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "title", limit: 700, null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20170906055844) do
     t.datetime "updated_at", null: false
     t.integer "shop_id"
     t.string "product_id"
+    t.string "image"
   end
 
   create_table "shops", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|

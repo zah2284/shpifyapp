@@ -88,7 +88,7 @@ class ProductController < ShopifyApp::AuthenticatedController
         @classid = p[:id]
         shop = Shop.find_by_shopify_domain current_shopify_domain
         product = shop.products.find(p[:id])
-        sproduct = ShopifyAPI::Product.delete(product.product_id)
+        # sproduct = ShopifyAPI::Product.delete(product.product_id)
         product.destroy
       }
      end
@@ -106,5 +106,23 @@ class ProductController < ShopifyApp::AuthenticatedController
       :product_options => {},
       :product_variant => {}
     )
+  end
+
+  def choose_image
+    @product = ShopifyAPI::Product.find(params[:id])
+  end
+  def save_image
+    respond_to do |format|
+      format.js {
+        pid = params["product_id"]
+        image_src = params["image_src"]
+
+        @product = Product.find_by_product_id(pid)
+        @product.image = image_src if image_src != ""
+        @product.save
+        @success = true if image_src != ""
+        puts "saving image for #{pid}"
+      }
+    end
   end
 end

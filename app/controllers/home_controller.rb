@@ -75,17 +75,16 @@ class HomeController < ShopifyApp::AuthenticatedController
   end
 
   def refresh_products
-    @products = ShopifyAPI::Product.all
-    @thisshop = Shop.find_by_shopify_domain current_shopify_domain
-    @thisshop.products.each do |product|
-      product.destroy
+    @products = []
+    (1..pages).each do |page|
+      @products += ShopifyAPI::Product.all(params: { page: page, limit: PER_PAGE })
     end
-    @thisshop.products = []
-    @thisshop.save
+
+    @thisshop = Shop.find_by_shopify_domain current_shopify_domain
+
     @filteredProd = []
     @products.each do |product|
       vendor = product.vendor.downcase
-      # vendor.strip!
       @filteredProd << product if vendor == "printex"
     end
 
@@ -131,7 +130,23 @@ class HomeController < ShopifyApp::AuthenticatedController
     return
   end
 
+  private
 
+  PER_PAGE = 200
+  # calculates total number of pages required
+  def pages
+    count = ShopifyAPI::Product.count
+    return 1 if count.zero?
+
+    div, mod = count.divmod(PER_PAGE)
+    if div.zero?
+      1
+    elsif mod > 0
+      div + 1
+    else
+      div
+    end
+  end
   def settings_params
     # params.require(:shop).permit!
   end

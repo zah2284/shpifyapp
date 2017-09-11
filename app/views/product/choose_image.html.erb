@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <div class="row">
+    <% for image in @product.images %>
+    <div class="col-xs-4 col-sm-3">
+      <div class="img-choice-wrapper">
+        <img src="<%= image.src %>" data-id="<%= image.id %>" alt="" class="img-thumbnail">
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+<script>
+  $(document).on("turbolinks:load",function(){
+    var image_input = $("#image_src");
+    $(".img-choice-wrapper img").on("click",function(){
+      var src = $(this).attr("src");
+      image_input.val(src);
+
+      $(".img-choice-wrapper img").removeClass("selected");
+      $(this).addClass("selected");
+    });
+  });
+</script>
+<form method="POST" action="<%= save_image_path %>" id="chooseImageForm" data-remote="true">
+  <input type="hidden" name="product_id" value="<%= @product.id %>">
+  <input type="hidden" name="image_src" id="image_src" value="">
+</form>
+<style>
+  .img-choice-wrapper {
+      height: 130px;
+      margin-top: 10px;
+  }
+  .img-choice-wrapper img {
+      object-fit: contain;
+      height: 100%;
+      width: 100%;
+      background: none;
+      cursor: pointer;
+  }
+  .img-choice-wrapper img.img-thumbnail.selected{
+    border-color: #5967c3;
+  }
+</style>
