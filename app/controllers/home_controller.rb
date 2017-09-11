@@ -124,9 +124,8 @@ class HomeController < ShopifyApp::AuthenticatedController
     @thisshop = Shop.find_by_shopify_domain current_shopify_domain
     parameters = params.permit(:printex_token)
     @thisshop.printex_token = parameters[:printex_token]
-    @thisshop.save
 
-    @show_notification = true
+    @show_notification = true if @thisshop.save
 
     redirect_to :settings
     return
