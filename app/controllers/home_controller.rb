@@ -127,6 +127,7 @@ class HomeController < ShopifyApp::AuthenticatedController
 
     @show_notification = true if @thisshop.save
 
+    flash[:notice] = "API Token saved successfully"
     redirect_to :settings
     return
   end
