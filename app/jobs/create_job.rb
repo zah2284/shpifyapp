@@ -54,7 +54,9 @@ class CreateJob < ActiveJob::Base
     for line_id in @line_items_ids
       fulfillment.line_items << { :id => line_id }
     end
-    fulfillment.save
+    if @line_items_ids != nil
+      fulfillment.save
+    end
   end
 
   def send_order_to_printex
