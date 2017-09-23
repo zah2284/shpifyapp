@@ -88,14 +88,17 @@ class CreateJob < ActiveJob::Base
       @line_items = {}
 
       product = nil
+      product_vendor = nil
       product = ShopifyAPI::Product.find(line_item["product_id"])
+
       if product != nil
         product_options = product.options.map { |o| o.name.downcase }
         variant = ShopifyAPI::Variant.find(line_item["variant_id"])
         product_vendor = product.vendor.downcase
 
-
+        puts "product_vendor_checked #{product_vendor}"
         if product_vendor == "printex"
+          puts "in the product vendor now #{product.title}"
           @line_items_ids << line_item["id"]
           # constructing line item
           product_db = @shop.products.find_by_product_id(product.id)
