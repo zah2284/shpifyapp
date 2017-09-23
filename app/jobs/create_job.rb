@@ -14,7 +14,8 @@ class CreateJob < ActiveJob::Base
       puts "**************************** in session"
 
 
-      get_line_items order
+      line_ids = get_line_items order
+      puts "line_ids here to inspect #{line_ids.inspect}"
       fulfill_items order["id"]
       # @order_arr = {
       #   "order[0]" => {
@@ -137,5 +138,7 @@ class CreateJob < ActiveJob::Base
         end
       end
     end
+
+    return @line_item_ids
   end
 end
