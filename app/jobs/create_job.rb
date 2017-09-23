@@ -16,7 +16,7 @@ class CreateJob < ActiveJob::Base
 
       line_ids = get_line_items order
       puts "line_ids here to inspect #{line_ids.inspect}"
-      fulfill_items order["id"]
+      fulfill_items (order["id"], line_ids)
       # @order_arr = {
       #   "order[0]" => {
       #     "order_number" => order["name"].sub!("#",""),
@@ -45,7 +45,7 @@ class CreateJob < ActiveJob::Base
     end
   end
 
-  def fulfill_items( order_id )
+  def fulfill_items( order_id, line_ids )
     fulfillment = ShopifyAPI::Fulfillment.new
     fulfillment.prefix_options[:order_id] = order_id
     fulfillment.tracking_number = nil
@@ -54,7 +54,7 @@ class CreateJob < ActiveJob::Base
     for line_id in @line_items_ids
       fulfillment.line_items << { :id => line_id }
     end
-    if @line_items_ids != nil
+    if line_ids != nil
       fulfillment.save
     end
   end
