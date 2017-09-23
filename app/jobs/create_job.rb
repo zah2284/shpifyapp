@@ -16,7 +16,7 @@ class CreateJob < ActiveJob::Base
 
       line_ids = get_line_items order
       puts "line_ids here to inspect #{line_ids.inspect}"
-      fulfill_items (order["id"], line_ids)
+      fulfill_items(order["id"], line_ids)
       # @order_arr = {
       #   "order[0]" => {
       #     "order_number" => order["name"].sub!("#",""),
