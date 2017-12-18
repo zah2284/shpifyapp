@@ -52,7 +52,7 @@ $(document).on('turbolinks:load', function(){
   $("button.choooseImageURL").on("click",function(){
     var id = $(this).attr("data-id");
     ShopifyApp.Modal.open({
-      src: "/product/image_url" + id,
+      src: "/product/image_url/" + id,
       title: 'Choose Image',
       width: 'small',
       height: 500,
