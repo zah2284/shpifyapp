@@ -49,7 +49,34 @@ $(document).on('turbolinks:load', function(){
 
     });
   });
+  $("button.choooseImageURL").on("click",function(){
+    var id = $(this).attr("data-id");
+    ShopifyApp.Modal.open({
+      src: "/product/image_url" + id,
+      title: 'Choose Image',
+      width: 'small',
+      height: 500,
+      buttons: {
+        primary: {
+          label: "Save",
+          callback: function(){
+            var mbody = ShopifyApp.Modal.window();
+            mbody.$("#chooseImageForm").submit();
+          }
+        },
+        secondary: [
+          {
+            label: "Cancel",
+            callback: function (label) {
+              ShopifyApp.Modal.close();
+            }
+          }
+        ]
+      }
+    }, function(result, data){
 
+    });
+  });
 
 
 });

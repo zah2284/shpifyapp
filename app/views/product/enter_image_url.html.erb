@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <form method="POST" action="<%= save_image_path %>" id="chooseImageForm" data-remote="true">
+        <input type="hidden" name="product_id" value="<%= @product.id %>">
+        <input type="url" class="form-control" name="image_src" id="image_src" value="">
+      </form>
+    </div>
+  </div>
+</div>
+<style>
+  .img-choice-wrapper {
+      height: 130px;
+      margin-top: 10px;
+  }
+  .img-choice-wrapper img {
+      object-fit: contain;
+      height: 100%;
+      width: 100%;
+      background: none;
+      cursor: pointer;
+  }
+  .img-choice-wrapper img.img-thumbnail.selected{
+    border-color: #5967c3;
+  }
+</style>

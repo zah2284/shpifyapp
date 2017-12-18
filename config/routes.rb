@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get '/settings/save_token', :to => "home#save_token"
   post '/home/signup', :to => "home#signup", :as => "create_account"
   get '/product/image/:id', :to => "product#choose_image", :as => "choose_image"
-  get '/product/image/:id', :to => "product#enter_image_url", :as => "enter_image_url"
+  get '/product/image_url/:id', :to => "product#enter_image_url", :as => "enter_image_url"
   post '/product/image/save', :to => "product#save_image", :as => "save_image"
   # get '/add/product', :to => "product#add", :as => "add_product"
   # post '/add/product', :to => "product#save_product"

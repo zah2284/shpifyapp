@@ -111,6 +111,9 @@ class ProductController < ShopifyApp::AuthenticatedController
   def choose_image
     @product = ShopifyAPI::Product.find(params[:id])
   end
+  def enter_image_url
+    @product = ShopifyAPI::Product.find(params[:id])
+  end
   def save_image
     respond_to do |format|
       format.js {
