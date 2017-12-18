@@ -46,7 +46,7 @@ class CreateJob < ActiveJob::Base
     require 'uri'
     require 'json'
 
-    uri = URI.parse("http://dev.lockerstock.printexinc.com/")
+    uri = URI.parse("http://lockerstock.printexinc.com/")
     header = {:Authorization =>  @shop.printex_token }
 
     # Create the HTTP objects
