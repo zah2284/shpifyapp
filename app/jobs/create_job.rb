@@ -8,36 +8,18 @@ class CreateJob < ActiveJob::Base
     @order_arr_date = DateTime.strptime(order["created_at"]).strftime("%m/%d/%Y")
     @order_title = order["name"].sub!("#","")
     @shop.with_shopify_session do
-      puts "****************************"
-      puts "****************************"
-      puts "****************************"
-      puts "**************************** in session"
+      # puts "****************************"
+      # puts "****************************"
+      # puts "****************************"
+      # puts "**************************** in session"
 
 
       line_ids = get_line_items order
-      puts "line_ids here to inspect #{line_ids.inspect}"
+      # puts "line_ids here to inspect #{line_ids.inspect}"
       fulfill_items(order["id"], line_ids)
-      # @order_arr = {
-      #   "order[0]" => {
-      #     "order_number" => order["name"].sub!("#",""),
-      #     "customer_name"  => order["shipping_address"]["first_name"],
-      #     "last_name" => order["shipping_address"]["last_name"],
-      #     "email" => order["email"],
-      #     "street_address" => order["shipping_address"]["address1"],
-      #     "city" => order["shipping_address"]["city"],
-      #     "state" => order["shipping_address"]["state"],
-      #     "zip" => order["shipping_address"]["zip"],
-      #     "street_address_2" => order["shipping_address"]["address2"],
-      #     "order_date" => order_date,
-      #     "return_name" => "",
-      #     "country" => order["shipping_address"]["country"],
-      #     "OrderLineItems" => @line_items
-      #   }
-      # }
-
-
-      puts "*************order ((((((((((((****"
-      puts @order_arr.inspect
+      
+      # puts "*************order (start ****"
+      # puts @order_arr.inspect
 
       # sending order to printex
       send_order_to_printex
@@ -101,7 +83,7 @@ class CreateJob < ActiveJob::Base
 
         puts "product_vendor_checked #{product_vendor}"
         if product_vendor == "printex"
-          puts "in the product vendor now #{product.title}"
+          # puts "in the product vendor now #{product.title}"
           @line_items_ids << line_item["id"]
           # constructing line item
           product_db = @shop.products.find_by_product_id(product.id)
