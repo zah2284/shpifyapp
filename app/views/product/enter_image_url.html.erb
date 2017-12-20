@@ -1,11 +1,18 @@
 <div class="container-fluid">
   <div class="row">
+    <% if @product.image %>
+    <div class="col-xs-12">
+      <div class="img-choice-wraper">
+        <img src="<%= @product.image %>" alt="">
+      </div>
+    </div>
+    <% end %>
     <div class="col-xs-12">
       <form method="POST" action="<%= save_image_path %>" id="chooseImageForm" data-remote="true">
         <input type="hidden" name="product_id" value="<%= @product.id %>">
         <div class="form-group mt-2">
           <label for="image_src">Enter URL here:</label>
-          <input type="url" class="form-control" placeholder="http://url-goes-here.com" name="image_src" id="image_src" value="">
+          <input type="url" class="form-control" placeholder="http://url-goes-here.com" name="image_src" id="image_src" value="<%= @product.image %>">
         </div>
       </form>
     </div>
