@@ -114,6 +114,7 @@ class ProductController < ShopifyApp::AuthenticatedController
   def enter_image_url
     @product = ShopifyAPI::Product.find(params[:id])
     @product_db = Product.where(:product_id => @product.id)
+    puts @product_db.inspect;
   end
   def save_image
     respond_to do |format|
